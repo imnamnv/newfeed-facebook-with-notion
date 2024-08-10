@@ -1,0 +1,25 @@
+/* This hides the news feed before the JS kicks in */
+div[id^="explorefeed_main_stream"],
+div[id^="topnews_main_stream"],
+div.ticker_stream,
+div.ego_column,
+#pagelet_home_stream,
+#pagelet_trending_tags_and_topics,
+#stories_pagelet_rhc,
+#fb_stories_card_root,
+#pagelet_gaming_destination_rhc,
+#pagelet_canvas_nav_content {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* 29/04/2024 */
+div[aria-label="Stories"],
+div[aria-label="Tin"],
+div[role="tablist"],
+div.x1hc1fzr.x1unhpq9.x6o7n8i {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+}
