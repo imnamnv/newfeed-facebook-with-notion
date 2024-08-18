@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Save time by blocking Newsfeed",
   "description": "Save time by blocking Newsfeed. This extension made by NamNV",
-  "version": "1.0.7",
+  "version": "1.0.0",
   "icons": {
     "16": "icon.png",
     "48": "icon.png",

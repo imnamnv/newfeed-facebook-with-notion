@@ -8,8 +8,8 @@ import {
 } from "../context/CategoryContext";
 import { getInitState, setInitState } from "../utils/storage";
 import TextList from "./TextList";
-import axios from "axios";
 import Header from "./Header";
+import { getText } from "../utils/api";
 
 export default ({ feed }: { feed: HTMLElement }) => {
   const { state, setState } = useContext<InitState & InitStateAction>(
@@ -20,11 +20,9 @@ export default ({ feed }: { feed: HTMLElement }) => {
     (async () => {
       try {
         setState({ initState: { state: { ...state, loading: true } } });
-        const response = await axios.get(
-          "https://notion-server-1.onrender.com/"
-        );
+        const response: any = await getText("75bd4c5f881e4910a08c4563938bc15c");
         setInitState({
-          state: { ...state, dateList: response.data },
+          state: { ...state, dateList: response },
         });
 
         const data = await getInitState();

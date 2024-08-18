@@ -14,7 +14,7 @@ import {
   InitStateAction,
 } from "../context/CategoryContext";
 import { setInitState } from "../utils/storage";
-import axios from "axios";
+import { getText } from "../utils/api";
 
 var randomProperty = function (obj) {
   var keys = Object.keys(obj);
@@ -119,19 +119,31 @@ export default () => {
               size="small"
               color="primary"
               onClick={async () => {
+                setState({
+                  initState: {
+                    state: { ...state, dateList: [], loading: true },
+                  },
+                });
+
                 try {
-                  const response = await axios.get(
-                    "https://notion-server-1.onrender.com/"
+                  const response: any = await getText(
+                    "75bd4c5f881e4910a08c4563938bc15c"
                   );
 
                   setInitState({
-                    state: { ...state, dateList: response.data },
+                    state: { ...state, dateList: response },
                   });
 
                   setState({
-                    initState: { state: { ...state, dateList: response.data } },
+                    initState: {
+                      state: { ...state, dateList: response, loading: false },
+                    },
                   });
                 } catch (error) {
+                  setState({
+                    initState: { state: { ...state, loading: false } },
+                  });
+
                   console.log(error);
                 }
               }}

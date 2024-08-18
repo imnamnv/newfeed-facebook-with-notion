@@ -33,6 +33,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
+    "@notionhq/client": "^2.2.15",
     "axios": "^1.7.3",
     "react-hook-form": "^7.33.1",
     "react-quizlet-flashcard": "^1.1.3",
