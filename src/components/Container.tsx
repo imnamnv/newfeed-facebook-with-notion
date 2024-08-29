@@ -20,12 +20,22 @@ export default ({ feed }: { feed: HTMLElement }) => {
     (async () => {
       try {
         setState({ initState: { state: { ...state, loading: true } } });
-        const response: any = await getText("75bd4c5f881e4910a08c4563938bc15c");
-        setInitState({
-          state: { ...state, dateList: response },
-        });
 
-        const data = await getInitState();
+        // If there is no data in the local storage, fetch the data from the server
+        let data = await getInitState();
+
+        if (Object.keys(data).length === 0) {
+          const response: any = await getText(
+            "75bd4c5f881e4910a08c4563938bc15c"
+          );
+          setInitState({
+            state: { ...state, dateList: response },
+          });
+
+          data = {
+            state: { ...state, dateList: response },
+          };
+        }
 
         if (Object.keys(data).length !== 0) {
           setState({ initState: { ...data, loading: false } });

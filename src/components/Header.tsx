@@ -130,6 +130,7 @@ export default () => {
                     "75bd4c5f881e4910a08c4563938bc15c"
                   );
 
+                  // Save the data to the local storage to avoid fetching the data again
                   setInitState({
                     state: { ...state, dateList: response },
                   });

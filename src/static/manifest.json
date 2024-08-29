@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Save time by blocking Newsfeed",
-  "description": "Save time by blocking Newsfeed. This extension made by NamNV",
+  "name": "Notion on Facebook",
+  "description": "Notion on Facebook. This extension made by NamNV",
   "version": "1.0.0",
   "icons": {
     "16": "icon.png",
@@ -9,7 +9,7 @@
     "128": "icon.png"
   },
   "action": {
-    "default_title": "Save time by blocking Newsfeed",
+    "default_title": "Notion on Facebook",
     "default_icon": "icon.png"
   },
   "content_scripts": [
