@@ -8,6 +8,7 @@ import {
 import TextList from "./TextList";
 import Header from "./Header";
 import { getAllToggles } from "../utils/api";
+import { getInitState } from "../utils/storage";
 
 export default ({ feed }: { feed: HTMLElement }) => {
   const { state, setState } = useContext<InitState & InitStateAction>(
@@ -17,11 +18,10 @@ export default ({ feed }: { feed: HTMLElement }) => {
   useEffect(() => {
     (async () => {
       try {
+        const { state } = await getInitState();
         setState({ initState: { state: { ...state, loading: true } } });
 
-        const togglesList = await getAllToggles(
-          "75bd4c5f881e4910a08c4563938bc15c"
-        );
+        const togglesList = await getAllToggles(state.pageId);
 
         setState({
           initState: { state: { ...state, togglesList, loading: false } },

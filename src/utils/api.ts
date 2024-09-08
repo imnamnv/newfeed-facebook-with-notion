@@ -1,12 +1,16 @@
 import axios from "axios";
 
 import { iteratePaginatedAPI } from "@notionhq/client";
+import { get } from "request";
+import { getInitState } from "./storage";
 
 let store = [];
 
 async function customNotionAPI(params) {
+  const { state } = await getInitState();
+
   // Gửi yêu cầu đến một endpoint API của Notion với params được cung cấp
-  let url = `https://late-band-aeed.nhockanthi001.workers.dev/blocks/${params.block_id}/children`;
+  let url = `${state.apiUrl}blocks/${params.block_id}/children`;
 
   if (params.start_cursor) {
     url += `?start_cursor=${params.start_cursor}`;
@@ -135,7 +139,7 @@ const getTextFromBlock = async (block, parentBlockName) => {
   if (block.has_children) {
     // For now, we'll just flag there are children blocks.
     text = text + " (Has children)";
-    return await main(block.id, block.toggle.rich_text[0].plain_text);
+    return await main(block.id, block.toggle.rich_text[0]?.plain_text);
   } else {
     // Includes block type for readability. Update formatting as needed.
     return { type: block.type, text: text };
@@ -181,8 +185,14 @@ export async function getText(pageId) {
 
 export async function getAllToggles(pageId) {
   const blocks = await retrieveBlockChildren(pageId);
-  return blocks.map((block) => ({
-    id: block.id,
-    text: block.toggle.rich_text[0].plain_text,
-  }));
+  return blocks
+    .map((block) => {
+      return block.toggle
+        ? {
+            id: block.id,
+            text: block.toggle.rich_text[0]?.plain_text,
+          }
+        : null;
+    })
+    .filter((block) => block);
 }

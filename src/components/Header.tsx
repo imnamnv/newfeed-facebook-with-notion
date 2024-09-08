@@ -64,13 +64,14 @@ export default () => {
   ) => {
     setCurrentToggle({ id: event.target.value });
   };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Box className={classes.root}>
-      {!currentToggle || loading ? (
-        <div>Loading...</div>
-      ) : (
-        <>
+      <>
+        {currentToggle && (
           <FormControl
             size="small"
             variant="outlined"
@@ -122,8 +123,8 @@ export default () => {
               Random data
             </ButtonMUI>
           </FormControl>
-        </>
-      )}
+        )}
+      </>
     </Box>
   );
 };

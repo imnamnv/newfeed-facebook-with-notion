@@ -5,13 +5,11 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
 module.exports = {
-  // mode: "development",
   entry: {
     popup: path.resolve("src/popup/popup.tsx"),
     options: path.resolve("src/options/options.tsx"),
     background: path.resolve("src/background/background.ts"),
     contentScript: path.resolve("src/contentScript/contentScript.tsx"),
-    intercept: path.resolve("src/utils/intercept.ts"),
   },
   output: {
     filename: "[name].js",
