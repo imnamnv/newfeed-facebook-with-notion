@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { iteratePaginatedAPI } from "@notionhq/client";
 
-let store = {};
+let store = [];
 
 async function customNotionAPI(params) {
   // Gửi yêu cầu đến một endpoint API của Notion với params được cung cấp
@@ -138,7 +138,7 @@ const getTextFromBlock = async (block, parentBlockName) => {
     return await main(block.id, block.toggle.rich_text[0].plain_text);
   } else {
     // Includes block type for readability. Update formatting as needed.
-    return { type: block.type, text: text, name: parentBlockName };
+    return { type: block.type, text: text };
   }
 };
 
@@ -162,13 +162,7 @@ async function retrieveBlockChildren(id) {
 const printBlockText = async (blocks, parentBlockName) => {
   for (let i = 0; i < blocks.length; i++) {
     const text: any = await getTextFromBlock(blocks[i], parentBlockName);
-    // Print plain text for each block.
-    if (text?.name) {
-      if (!store[text.name]) {
-        store[text.name] = [];
-      }
-      store[text.name].push(text);
-    }
+    store.push(text);
   }
 };
 
@@ -180,7 +174,15 @@ async function main(blockId = "", parentBlockName = null) {
 }
 
 export async function getText(pageId) {
-  store = {};
+  store = [];
   await main(pageId);
   return store;
+}
+
+export async function getAllToggles(pageId) {
+  const blocks = await retrieveBlockChildren(pageId);
+  return blocks.map((block) => ({
+    id: block.id,
+    text: block.toggle.rich_text[0].plain_text,
+  }));
 }

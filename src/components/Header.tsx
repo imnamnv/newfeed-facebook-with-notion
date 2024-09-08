@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Box,
   FormControl,
@@ -13,12 +13,9 @@ import {
   InitState,
   InitStateAction,
 } from "../context/CategoryContext";
-import { setInitState } from "../utils/storage";
-import { getText } from "../utils/api";
 
 var randomProperty = function (obj) {
-  var keys = Object.keys(obj);
-  return keys[(keys.length * Math.random()) << 0];
+  return obj[(obj.length * Math.random()) << 0].id;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -49,31 +46,31 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default () => {
-  const { state, setCurrentCategory, setState } = useContext<
-    InitState & InitStateAction
-  >(CategoryContext);
+  const {
+    state: { togglesList, loading, currentToggle },
+    setCurrentToggle,
+  } = useContext<InitState & InitStateAction>(CategoryContext);
 
   const classes = useStyles();
 
   useEffect(() => {
-    if (state.dateList && Object.keys(state.dateList).length > 0) {
-      setCurrentCategory({ id: randomProperty(state.dateList) });
+    if (togglesList && togglesList.length > 0) {
+      setCurrentToggle({ id: randomProperty(togglesList) });
     }
-  }, [state.dateList]);
+  }, [togglesList]);
 
   const handleCaregoryChange = (
     event: React.ChangeEvent<{ name?: string; value: string }>
   ) => {
-    setCurrentCategory({ id: event.target.value });
+    setCurrentToggle({ id: event.target.value });
   };
 
   return (
     <Box className={classes.root}>
-      {state.loading ? (
+      {!currentToggle || loading ? (
         <div>Loading...</div>
       ) : (
         <>
-          {" "}
           <FormControl
             size="small"
             variant="outlined"
@@ -92,7 +89,7 @@ export default () => {
             <Select
               className={classes.select}
               native
-              value={state.currentCategory}
+              value={currentToggle}
               onChange={handleCaregoryChange}
               label="Category"
               inputProps={{
@@ -101,10 +98,10 @@ export default () => {
               }}
               style={{ flexGrow: 1 }}
             >
-              {Object.keys(state.dateList).map((category, index) => {
+              {togglesList?.map((toggle, index) => {
                 return (
-                  <option key={index} value={category}>
-                    {category}
+                  <option key={index} value={toggle.id}>
+                    {toggle.text}
                   </option>
                 );
               })}
@@ -119,37 +116,10 @@ export default () => {
               size="small"
               color="primary"
               onClick={async () => {
-                setState({
-                  initState: {
-                    state: { ...state, dateList: [], loading: true },
-                  },
-                });
-
-                try {
-                  const response: any = await getText(
-                    "75bd4c5f881e4910a08c4563938bc15c"
-                  );
-
-                  // Save the data to the local storage to avoid fetching the data again
-                  setInitState({
-                    state: { ...state, dateList: response },
-                  });
-
-                  setState({
-                    initState: {
-                      state: { ...state, dateList: response, loading: false },
-                    },
-                  });
-                } catch (error) {
-                  setState({
-                    initState: { state: { ...state, loading: false } },
-                  });
-
-                  console.log(error);
-                }
+                setCurrentToggle({ id: randomProperty(togglesList) });
               }}
             >
-              Re-fetch data
+              Random data
             </ButtonMUI>
           </FormControl>
         </>
